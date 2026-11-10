@@ -6,7 +6,8 @@ iPad demo of the teacher experience (Today · Plan · Progress · Big 5) with th
 ## Run it
 - **Locally:** `python3 -m http.server -d site 8000` then open http://localhost:8000
 - **Live (GitHub Pages):** Settings → Pages → Source: *GitHub Actions*. Every push to `main` runs `build.py --live` and deploys `site/`.
-- **Live vs. local:** the hosted build (`python3 build.py --live`) removes the full-screen **Present** button, and tapping the NOW box opens it on the board (Back to board closes it) instead of jumping to the record screen. The committed `site/` and a plain `python3 build.py` are the presentation build: Present mode on, tapping NOW opens the record screen. Live-only changes are listed in `LIVE_EDITS` in `build.py`.
+- **Both builds:** tapping the NOW box opens it on the board (Back to board closes it); "Record this box" opens the record screen.
+- **Live vs. local:** the hosted build (`python3 build.py --live`) has no full-screen **Present** button and no QR card. The committed `site/` and a plain `python3 build.py` are the presentation build: Present mode on, plus a "Check it Out Yourself" QR card (`src/board/qr_card.html`, code in `src/board/qr_live.svg`) linking to the live site. Live-only removals are listed in `LIVE_EDITS` in `build.py`.
 - Needs a first online load for the Poppins font (Google Fonts); after that it runs from cache.
 
 ## Layout

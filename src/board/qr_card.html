@@ -1,0 +1,50 @@
+<style>
+#qrCard{position:relative;margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 12px 12px 18px;border-radius:18px;
+  background:#fff;color:var(--navy);box-shadow:0 6px 0 rgba(0,0,0,.18);border:3px solid var(--yellow);flex:none}
+#qrCard::before{content:"";position:absolute;inset:-9px;border-radius:24px;border:2px dashed rgba(255,194,14,.55);pointer-events:none}
+#qrCard b{font-family:var(--display);font-weight:800;font-size:31px;line-height:1.02;color:var(--blue)}
+#qrCard b span{display:block;color:var(--navy)}
+#qrCard .qr-code{flex:none;width:150px;height:150px;padding:8px;background:#fff;border-radius:12px;border:2px solid var(--mist)}
+#qrCard .qr-code svg{display:block;width:100%;height:100%}
+aside.qr-measure,aside.qr-measure *{transition:none!important}
+/* shorter screens (e.g. 16:9 projector): step down until the whole lesson list fits */
+aside.qr-1 #qrCard .qr-code{width:124px;height:124px;padding:6px}
+aside.qr-1 #qrCard{padding:10px 10px 10px 16px}
+aside.qr-1 #qrCard b{font-size:28px}
+aside.qr-2 #list{gap:4px}
+aside.qr-2 #list li{padding:1px 10px 1px 8px;border-width:2px}
+aside.qr-2 #list li .box{width:26px;height:26px;font-size:13px;border-width:2px}
+aside.qr-2 #list li .lbl b{font-size:14.5px}
+aside.qr-2 #list li .lbl span{font-size:10.5px;margin-top:1px}
+aside.qr-3 #qrCard .qr-code{width:100px;height:100px;padding:4px}
+aside.qr-3 #qrCard{padding:8px 8px 8px 14px}
+aside.qr-3 #qrCard b{font-size:24px}
+</style>
+<script>
+/* Presentation build only: "Check it Out Yourself" QR card linking to the hosted demo */
+(function(){
+  var aside=document.querySelector('aside'); if(!aside) return;
+  var card=document.createElement('div'); card.id='qrCard';
+  card.innerHTML='<b>Check it Out <span>Yourself</span></b><div class="qr-code">__QR_SVG__</div>';
+  var keys=document.getElementById('dreamsKeys');
+  if(keys&&keys.parentNode===aside) aside.insertBefore(card,keys); else aside.appendChild(card);
+  var list=document.getElementById('list'), LV=['qr-1','qr-2','qr-3'];
+  function fits(){ return !list || list.scrollHeight<=list.clientHeight+1; }
+  function fit(){
+    // the list rows animate size changes; switch that off while measuring so we read final sizes
+    aside.classList.add('qr-measure');
+    LV.forEach(function(c){ aside.classList.remove(c); });
+    for(var i=0;i<LV.length&&!fits();i++) aside.classList.add(LV[i]);
+    void aside.offsetHeight; aside.classList.remove('qr-measure');
+  }
+  // re-fit whenever the panel, the list or any step in it changes size
+  // (window resize, Present mode, full screen, fonts loading, steps being checked off)
+  var queued=false; function later(){ if(queued) return; queued=true;
+    setTimeout(function(){ queued=false; fit(); },30); }
+  fit(); window.addEventListener('resize',later);
+  if(window.ResizeObserver){ var ro=new ResizeObserver(later); ro.observe(aside);
+    if(list){ ro.observe(list); [].forEach.call(list.children,function(li){ ro.observe(li); }); } }
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(later);
+  setTimeout(later,500); setTimeout(later,1500);
+})();
+</script>

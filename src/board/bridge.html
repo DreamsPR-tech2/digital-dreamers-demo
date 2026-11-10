@@ -19,7 +19,7 @@ aside.locked #dreamsKeys .btn#dreamsPres{opacity:1;pointer-events:auto}aside.loc
       if(t.closest('.bk-start,.exstart')){ key('1'); return; }
       return;
     }
-    if(p.classList.contains('active')){ post({type:'dreams-box',n:+p.dataset.step}); } else if(orig){ orig.call(p,ev); }
+    if(p.classList.contains('active')){ key('Enter'); } else if(orig){ orig.call(p,ev); }
   }; });
   var keys=document.querySelector('aside .keys');if(!keys){var asd=document.querySelector('aside');if(asd){keys=document.createElement('div');keys.className='keys';var ct=asd.querySelector('.ctrls');if(ct)asd.insertBefore(keys,ct);else asd.appendChild(keys);}}
   if(keys){ keys.innerHTML=''; keys.id='dreamsKeys'; keys.className='';
@@ -28,7 +28,7 @@ aside.locked #dreamsKeys .btn#dreamsPres{opacity:1;pointer-events:auto}aside.loc
     pb.onclick=function(){ key(presenting()?'b':'Enter'); setTimeout(lab,1500); setTimeout(lab,50); };
     var b=document.createElement('button'); b.className='btn'; b.id='dreamsRec'; b.type='button'; b.innerHTML='&#9998;&nbsp; Record this box &middot; Registrar';
     b.onclick=function(){ var a=document.querySelector('.panel.active'); post({type:'dreams-box',n:a?+a.dataset.step:1}); };
-    var h=document.createElement('div'); h.className='hint'; h.textContent='or tap the NOW box again · o toca la caja NOW otra vez';
+    var h=document.createElement('div'); h.className='hint'; h.textContent='or tap the NOW box · o toca la caja NOW';
     keys.appendChild(pb); keys.appendChild(b); keys.appendChild(h); lab();
     if(window.MutationObserver&&board){ new MutationObserver(lab).observe(board,{attributes:true,attributeFilter:['class']}); }
   }

@@ -1,7 +1,8 @@
 """Assemble site/index.html and site/board.html from src/.
 
-Usage: python3 build.py          # presentation build: Present mode, tapping NOW opens the record screen
-       python3 build.py --live   # hosted build: no Present mode, tapping NOW opens the box on the board
+Usage: python3 build.py          # presentation build: Present mode + "Check it Out Yourself" QR card
+       python3 build.py --live   # hosted build: no Present mode, no QR card
+Both builds: tapping the NOW box opens it on the board; "Record this box" opens the record screen.
 """
 import re, sys, subprocess, pathlib
 LIVE = '--live' in sys.argv
@@ -16,18 +17,6 @@ LIVE_EDITS = [
      """<button class="btn sm" data-act="present">${ico('board',15,'#fff')} ${es?'Presentar':'Present'}</button>""", ''),
     ('remove Present click handler', 'index',
      "case 'present':enterPresent();break;", ''),
-    ('hint above board (ES)', 'index',
-     'Toca la caja NOW otra vez, o «Record this box», para registrar',
-     'Toca la caja NOW para abrirla · «Record this box» para registrar'),
-    ('hint above board (EN)', 'index',
-     'Tap the NOW box again, or “Record this box”, to record',
-     'Tap the NOW box to open it · “Record this box” to record'),
-    ('tapping NOW box opens it on the board instead of the record screen', 'board',
-     "if(p.classList.contains('active')){ post({type:'dreams-box',n:+p.dataset.step}); }",
-     "if(p.classList.contains('active')){ key('Enter'); }"),
-    ('board side-panel hint', 'board',
-     "or tap the NOW box again · o toca la caja NOW otra vez",
-     "or tap the NOW box · o toca la caja NOW"),
 ]
 
 def apply_live(text, which):
@@ -47,10 +36,14 @@ html = html.replace('__LOGO__', rd('logo_src.txt').strip())
 # live board = Somos Parte board + bridge script (talks to the app via postMessage)
 board = rd('board/board_source.html').replace('<div class="foot">Write <i></i> Dictate <i></i> Build</div>', '')
 i = board.rfind('</body>')
-board = board[:i] + rd('board/bridge.html') + '\n' + board[i:]
+board_extra = rd('board/bridge.html')
+if not LIVE:
+    # presentation build only: "Check it Out Yourself" QR card pointing at the hosted demo
+    board_extra += '\n' + rd('board/qr_card.html').replace('__QR_SVG__', rd('board/qr_live.svg').strip())
+board = board[:i] + board_extra + '\n' + board[i:]
 if LIVE:
     html, board = apply_live(html, 'index'), apply_live(board, 'board')
-    print('live build: Present mode removed; tapping NOW opens the box on the board')
+    print('live build: Present mode removed, no QR card')
 (R / 'site' / 'index.html').write_text(html, encoding='utf-8')
 (R / 'site' / 'board.html').write_text(board, encoding='utf-8')
 
