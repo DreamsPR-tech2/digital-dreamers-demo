@@ -1,4 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="kind"><path d="M100 40c-8-20-40-16-40 8 0 18 40 40 40 40s40-22 40-40c0-24-32-28-40-8z" fill="#EE394B"/>
-<path d="M30 118q10-14 30-8l36 12q10 4 4 14t-20 6l-30-8" fill="#FFC20E" stroke="#FFC20E" stroke-width="6" stroke-linejoin="round"/>
-<path d="M170 118q-10-14-30-8l-36 12q-10 4-4 14t20 6l30-8" fill="#FFC20E" stroke="#FFC20E" stroke-width="6" stroke-linejoin="round"/>
-<path d="M44 160q56 26 112 0" fill="none" stroke="#283D68" stroke-width="9" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 128" width="160" height="128" role="img" aria-label="Kind illustration">
+<path d="M80 42C63 26 52 37 52 49c0 15 28 32 28 32s28-17 28-32c0-12-11-23-28-7Z" fill="#F3475D"/><path d="M16 89c12-10 24-12 35-5l17 11 20-2c10-1 14 11 4 15l-33 8c-9 2-17 0-25-5l-18-9" fill="#FFD064" stroke="#293F70" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M144 89c-12-10-24-12-35-5L92 95l-20-2c-10-1-14 11-4 15l33 8c9 2 17 0 25-5l18-9" fill="#FFBE3A" stroke="#293F70" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M70 94h20" stroke="#293F70" stroke-width="4" stroke-linecap="round"/>
+</svg>
