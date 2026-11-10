@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# build.py scratch file (normally deleted after the syntax check)
+all.js
+
+# Python
+__pycache__/
+*.pyc
+.venv/

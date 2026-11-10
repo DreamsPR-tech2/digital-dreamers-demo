@@ -1,0 +1,41 @@
+<style>#reset{display:none!important}#list{gap:5px}#list li{padding:5px 10px 5px 8px;border-width:2px}#list li .box{width:32px;height:32px;font-size:16px}#list li .lbl b{font-size:15.5px}#list li .lbl span{font-size:11px}aside{gap:10px}
+#dreamsKeys{display:flex;flex-direction:column;gap:6px}#dreamsKeys .btn{width:100%;min-height:46px;font-size:17px;background:#fff;color:#2A3D66}#dreamsKeys #dreamsPres{background:#FFC20E;color:#2B2B2B}#dreamsKeys .hint{font-size:12px;opacity:.8;text-align:center}
+aside.locked #dreamsKeys .btn#dreamsPres{opacity:1;pointer-events:auto}aside.locked #dreamsKeys .btn#dreamsRec{opacity:1;pointer-events:auto}
+#board.presenting .bk-start,#board.presenting .excard,#board.presenting .extab,#board.presenting .exstart{cursor:pointer}</style>
+<script>
+/* DREAMS bridge · lets the teacher app open a box for recording and keep the board in step */
+(function(){
+  var P=window.parent; if(!P||P===window) return;
+  function post(m){ try{ P.postMessage(m,'*'); }catch(e){} }
+  function key(k){ document.dispatchEvent(new KeyboardEvent('keydown',{key:k,bubbles:true,cancelable:true})); }
+  var board=document.getElementById('board');
+  function presenting(){ return board&&board.classList.contains('presenting'); }
+  var panels=[].slice.call(document.querySelectorAll('.panel'));
+  panels.forEach(function(p){ var orig=p.onclick; p.onclick=function(ev){
+    var t=ev&&ev.target;
+    if(presenting()){
+      if(!t||!t.closest) return;
+      var ex=t.closest('.excard,.extab'); if(ex&&ex.dataset.ex){ key(ex.dataset.ex); return; }
+      if(t.closest('.bk-start,.exstart')){ key('1'); return; }
+      return;
+    }
+    if(p.classList.contains('active')){ post({type:'dreams-box',n:+p.dataset.step}); } else if(orig){ orig.call(p,ev); }
+  }; });
+  var keys=document.querySelector('aside .keys');if(!keys){var asd=document.querySelector('aside');if(asd){keys=document.createElement('div');keys.className='keys';var ct=asd.querySelector('.ctrls');if(ct)asd.insertBefore(keys,ct);else asd.appendChild(keys);}}
+  if(keys){ keys.innerHTML=''; keys.id='dreamsKeys'; keys.className='';
+    var pb=document.createElement('button'); pb.className='btn'; pb.id='dreamsPres'; pb.type='button';
+    function lab(){ pb.innerHTML=presenting()?'&#8634;&nbsp; Back to board &middot; Tablero':'&#9974;&nbsp; Open this box &middot; Abrir'; }
+    pb.onclick=function(){ key(presenting()?'b':'Enter'); setTimeout(lab,1500); setTimeout(lab,50); };
+    var b=document.createElement('button'); b.className='btn'; b.id='dreamsRec'; b.type='button'; b.innerHTML='&#9998;&nbsp; Record this box &middot; Registrar';
+    b.onclick=function(){ var a=document.querySelector('.panel.active'); post({type:'dreams-box',n:a?+a.dataset.step:1}); };
+    var h=document.createElement('div'); h.className='hint'; h.textContent='or tap the NOW box again · o toca la caja NOW otra vez';
+    keys.appendChild(pb); keys.appendChild(b); keys.appendChild(h); lab();
+    if(window.MutationObserver&&board){ new MutationObserver(lab).observe(board,{attributes:true,attributeFilter:['class']}); }
+  }
+  function goto(n){ var li=document.querySelector('#list li[data-step="'+n+'"]'); if(li&&li.onclick) li.onclick(); }
+  window.addEventListener('message',function(e){ var d=e.data||{}; if(d.type==='dreams-goto'){ if(presenting()){ key('b'); setTimeout(function(){ goto(d.n); },1500); } else goto(d.n); } });
+  window.addEventListener('message',function(e){ var d=e.data||{}; if(d.type==='dreams-key'){ document.dispatchEvent(new KeyboardEvent('keydown',{key:d.key,repeat:!!d.repeat,bubbles:true,cancelable:true})); } });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') post({type:'dreams-esc'}); },true);
+  post({type:'dreams-ready'});
+})();
+</script>
