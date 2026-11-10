@@ -4,9 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DREAMS Inclusive Early Learning Framework™ · Experiencia docente · We Are Friends</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="fonts/poppins.css" rel="stylesheet">
 <style>
 :root{
   --blue:#2E86D1; --blue-d:#1D4ED8; --red:#E63946; --yellow:#FFC20E; --ink:#2B2B2B; --navy:#2A3D66; --canvas:#F6F6F6; --mist:#D7E6F3; --sand:#F0E6D2; --seafoam:#A8DCC3; --apricot:#FFC191;
@@ -1313,17 +1311,143 @@ function watchList(){const es=UI.lang==='es';const out=[];simulateB5();
  KIDS.forEach(k=>{if(k.live)return;const lows=BIG5.map(d=>({d,l:domLevel(k.id,d.id)})).filter(x=>x.l.lv===1).sort((x,y)=>x.l.pct-y.l.pct||hash(k.id+x.d.id)%7-hash(k.id+y.d.id)%7);const c=kidSummary(k.id);const noItems=ITEMS.filter(it=>getR(k.id,it.id)==='no');
   if(lows.length||noItems.length>=2){const d=lows[0];out.push({k,why:d?`${sw(d.d)}${L(d.d.n)} · ${t('lv1')}`:(es?`${noItems.length} aún no en la última sesión`:`${noItems.length} not yet last session`),tip:d?({bk:{es:'Fotos reales del salón antes del cuento',en:'Real classroom photos before the story'},ol:{es:'Frase de dos palabras con cada tarjeta',en:'Two-word phrase with every card'},pa:{es:'Aplaudir sílabas · pista táctil primero',en:'Clap syllables · tactile cue first'},ak:{es:'Primera letra de su nombre en el Big Book',en:'First letter of their name in the Big Book'},cp:{es:'Tres imágenes fuera de orden',en:'Three pictures out of order'}})[d.d.id]:{es:'Elección de dos · modelo primero',en:'Choice of two · model first'},score:(lows.length*2+noItems.length)})}});
  return out.sort((a,b)=>b.score-a.score).slice(0,4)}
-function boxNotes(bid){/* per-box student notes from today's data, the screening and each profile */const es=UI.lang==='es';const N=[];const add=(k,txt)=>{if(N.length<4&&!N.some(n=>n.k===k.id))N.push({k,txt})};const R=(k,i)=>getR(k.id,i);const lowB5=(k,d)=>domLevel(k.id,d).lv===1;
- if(bid==='intro'){KIDS.filter(k=>['sup','no'].includes(R(k,'reg_body'))||k.id==='lucas').forEach(k=>add(k,es?'agenda visual antes del saludo':'visual schedule before the greeting'));KIDS.filter(k=>k.modes.includes('aac')).forEach(k=>add(k,es?'saludo en el tablero CAA':'greeting on the AAC board'));KIDS.filter(k=>k.id==='isabella').forEach(k=>add(k,es?'saluda primero a una pareja':'greets a partner first'))}
- if(bid==='today'){KIDS.filter(k=>k.id==='lucas').forEach(k=>add(k,es?'señala cada imán con él':'point to each magnet with him'));KIDS.filter(k=>k.modes.includes('point')&&k.id!=='lucas').forEach(k=>add(k,es?'imanes al alcance':'magnets within reach'))}
- if(bid==='ready'){KIDS.filter(k=>['sup','no'].includes(R(k,'reg_body'))).forEach(k=>add(k,es?'opción sentada · adulto al lado':'seated option · adult beside'));KIDS.filter(k=>k.id==='noah').forEach(k=>add(k,es?'March in Place antes de sentarse':'March in Place before sitting'));KIDS.filter(k=>k.id==='sofia').forEach(k=>add(k,es?'10 s de espera':'10 s wait time'))}
- if(bid==='sounds'){KIDS.filter(k=>R(k,'snd')&&R(k,'snd')!=='ok'||lowB5(k,'pa')).forEach(k=>add(k,es?'pista táctil y espejo':'tactile cue and mirror'));KIDS.filter(k=>WORDS.some(w=>R(k,'w_'+w.id)==='no')).forEach(k=>add(k,es?'elección de dos tarjetas':'choice of two cards'));KIDS.filter(k=>k.home==='es'&&k.persp).forEach(k=>add(k,es?'español primero, luego inglés':'Spanish first, then English'))}
- if(bid==='book'){KIDS.filter(k=>R(k,'retell')&&R(k,'retell')!=='ok'||lowB5(k,'cp')).forEach(k=>add(k,es?'tres imágenes fuera de orden':'three pictures out of order'));KIDS.filter(k=>k.home==='en').forEach(k=>add(k,es?'inglés primero, eco en español':'English first, Spanish echo'));KIDS.filter(k=>k.id==='emma').forEach(k=>add(k,es?'asiento frente al libro':'seat facing the book'))}
- if(bid==='sentences'){KIDS.filter(k=>R(k,'word')&&R(k,'word')!=='ok'||lowB5(k,'ol')).forEach(k=>add(k,es?'frase de dos palabras':'two-word frame'));KIDS.filter(k=>k.modes.includes('aac')||k.modes.includes('sign')).forEach(k=>add(k,es?'frases precargadas en CAA / señas':'frames pre-loaded on AAC / signs'))}
- if(bid==='fly'){KIDS.filter(k=>R(k,'bk')&&R(k,'bk')!=='ok'||lowB5(k,'bk')).forEach(k=>add(k,es?'foto real del salón':'real classroom photo'));KIDS.filter(k=>k.id==='lucas').forEach(k=>add(k,es?'avisar antes del cambio':'warn before the change'))}
- if(bid==='exercise'){KIDS.filter(k=>['sup','no'].includes(R(k,'wings'))||k.id==='diego').forEach(k=>add(k,es?'opción sentada · adulto modela':'seated option · adult models'));KIDS.filter(k=>['sup','no'].includes(R(k,'turn'))).forEach(k=>add(k,es?'First/Next con traspaso del adulto':'First/Next with adult hand-off'))}
- if(bid==='closing'){KIDS.filter(k=>k.modes.includes('aac')||k.modes.includes('sign')).forEach(k=>add(k,es?'promesa con símbolos / señas':'pledge with symbols / signs'));KIDS.filter(k=>['sup','no'].includes(R(k,'reg_body'))).forEach(k=>add(k,es?'respiración con la tarjeta de cinco dedos':'breathing with the Five-Finger card'))}
- return N}
+/* Student notes, written per child from their profile: today's data decides WHO needs a note in a box,
+   the child's own supports decide WHAT the note says. [en, es] */
+const KNOTE={
+ intro:{valentina:['greet her in Spanish first, then “Hello, friend!”','salúdala en español primero, luego «Hello, friend!»'],
+  liam:['greeting in English; he echoes “¡Hola, amigos!”','saludo en inglés; él repite «¡Hola, amigos!»'],
+  sofia:['large feelings faces; wait 10 s for her word or sign','caritas grandes; espera 10 s su palabra o seña'],
+  mateo:['greeting and feeling on his AAC board; model the tap first','saludo y emoción en su tablero CAA; modela el toque primero'],
+  lucas:['visual schedule up before the greeting: “First hello, next magnets”','agenda visual antes del saludo: «Primero hola, luego imanes»'],
+  diego:['feelings cards on his tray, within reach','caritas en su bandeja, a su alcance'],
+  isabella:['greets her partner first, then waves to the group','saluda primero a su pareja, luego al grupo'],
+  noah:['March in Place 30 s, then the greeting','March in Place 30 s, luego el saludo'],
+  emma:['seat facing you; sign HELLO with the greeting','asiento frente a ti; seña de HOLA con el saludo'],
+  sebastian:['greet him in Spanish; he answers in English','salúdalo en español; responde en inglés'],
+  camila:['hands out the name cards','reparte las tarjetas de nombre'],
+  amaya:['models the greeting in both languages','modela el saludo en los dos idiomas']},
+ today:{lucas:['point to each magnet with him; same order as today','señala cada imán con él; mismo orden que hoy'],
+  diego:['magnets within reach of his chair','imanes al alcance de su silla'],
+  mateo:['magnet symbols on his AAC board','símbolos de los imanes en su tablero CAA'],
+  emma:['sign each magnet word as you name it','seña de cada imán al nombrarlo'],
+  isabella:['points to the magnets with a partner','señala los imanes con su pareja']},
+ ready:{lucas:['quiet-corner option open; Five-Finger card in his hand','rincón tranquilo disponible; tarjeta de cinco dedos en la mano'],
+  noah:['March in Place before the rug, then a spot at the edge','March in Place antes de la alfombra, luego un lugar en la orilla'],
+  sofia:['say the seated option aloud; adult models each step','nombra la opción sentada; un adulto modela cada paso'],
+  diego:['seated version of each move; adult beside him','versión sentada de cada movimiento; adulto a su lado'],
+  sebastian:['Notice 3·2·1 with an adult: name one thing he sees','Noto 3·2·1 con un adulto: nombra algo que ve'],
+  valentina:['routine cues in Spanish','pistas de la rutina en español'],
+  isabella:['stands beside her partner for the routine','se para junto a su pareja en la rutina'],
+  emma:['picture cards for Notice 3·2·1; face the group','tarjetas para Noto 3·2·1; de frente al grupo'],
+  mateo:['taps “I am ready” on his AAC board','toca «estoy listo» en su tablero CAA'],
+  liam:['routine in English; he echoes “¡Estoy listo!”','rutina en inglés; repite «¡Estoy listo!»'],
+  camila:['leads Five-Finger Breathing for her table','guía la respiración de cinco dedos en su mesa'],
+  amaya:['models Pep’s routine in both languages','modela la rutina de Pep en los dos idiomas']},
+ sounds:{sofia:['large tactile letter cards; 10 s to answer','letras táctiles grandes; 10 s para responder'],
+  mateo:['tap the picture for each sound on his AAC board','toca la imagen de cada sonido en su CAA'],
+  sebastian:['tactile cue on each sound + mirror','pista táctil en cada sonido + espejo'],
+  liam:['mirror for /K/ and /T/; Spanish word visible on the card','espejo para /K/ y /T/; palabra en español visible'],
+  diego:['picture cards on his tray; he points','tarjetas en su bandeja; él señala'],
+  emma:['face her for mouth shapes; gesture with each word','de frente para ver la boca; gesto con cada palabra'],
+  valentina:['each word in Spanish first, then English','cada palabra en español primero, luego inglés'],
+  isabella:['says each sound to her partner first','dice cada sonido a su pareja primero'],
+  lucas:['two cards at a time, not four','dos tarjetas a la vez, no cuatro'],
+  noah:['jumps or claps once for each sound','salta o aplaude una vez por sonido'],
+  camila:['partners with Sebastián and models','pareja de Sebastián; ella modela'],
+  amaya:['models the sounds in both languages','modela los sonidos en los dos idiomas']},
+ book:{sofia:['two pictures, not three; model first, then she chooses','dos imágenes, no tres; modelo primero, luego elige'],
+  mateo:['retell on his AAC board: First · Next · Last','recuento en su CAA: Primero · Luego · Último'],
+  lucas:['two pictures; warn him before each page turn','dos imágenes; avisa antes de cada página'],
+  sebastian:['retell in Spanish first, then the English words','recuento en español primero, luego las palabras en inglés'],
+  diego:['pictures on his tray; he points in order','imágenes en su bandeja; señala en orden'],
+  liam:['English first, Spanish echo on each page','inglés primero, eco en español en cada página'],
+  valentina:['bilingual partner for the retell','pareja bilingüe para el recuento'],
+  isabella:['retells to her partner, not the whole group','recuenta a su pareja, no al grupo'],
+  emma:['seat facing the book; sign NEXT before each page','asiento frente al libro; seña de LUEGO antes de cada página'],
+  noah:['page helper: holds up each picture','ayudante de páginas: levanta cada imagen'],
+  camila:['retells in English with a sentence starter','recuenta en inglés con un inicio de frase'],
+  amaya:['models the retell in both languages','modela el recuento en los dos idiomas']},
+ sentences:{sofia:['“We are…” + one sign; model first','«We are…» + una seña; modelo primero'],
+  mateo:['frames pre-loaded on his AAC board','frases precargadas en su CAA'],
+  camila:['says it in Spanish first, then the English frame','lo dice en español, luego la frase en inglés'],
+  diego:['builds the sentence with magnets on his tray','arma la frase con imanes en su bandeja'],
+  isabella:['says her sentence to a partner first','dice su frase a su pareja primero'],
+  emma:['signs WE ARE FRIENDS with the frame','seña de SOMOS AMIGOS con la frase'],
+  lucas:['two magnet choices, not three','dos imanes para elegir, no tres'],
+  sebastian:['dictates in Spanish; adult models the English','dicta en español; un adulto modela el inglés'],
+  valentina:['Spanish sentence first, then English','frase en español primero, luego inglés'],
+  liam:['extend: “We are… because…”','extender: «We are… because…»'],
+  noah:['builds with magnets standing at the board','arma con imanes de pie en la pizarra'],
+  amaya:['writes “We are… because…” for the class','escribe «We are… because…» para la clase']},
+ fly:{valentina:['photo of her bilingual partner; names her in Spanish','foto de su pareja bilingüe; la nombra en español'],
+  sofia:['photo of a friend + sign FRIEND','foto de un amigo + seña de AMIGO'],
+  mateo:['classmates’ photos added to his AAC board','fotos de compañeros en su tablero CAA'],
+  lucas:['warn 1 minute before the transition; photo of his helper','avisa 1 minuto antes; foto de su ayudante'],
+  sebastian:['photo of a helper; says the name in Spanish','foto de un ayudante; dice el nombre en español'],
+  isabella:['points to a friend’s photo; whispers the name to her partner','señala la foto; susurra el nombre a su pareja'],
+  emma:['photo card; face her when you ask “Who is a friend?”','foto; de frente al preguntar «¿Quién es un amigo?»'],
+  diego:['friends’ photos on his tray to point to','fotos de amigos en su bandeja para señalar'],
+  noah:['marches to the photo wall to pick one','marcha al mural de fotos para elegir una'],
+  liam:['names a friend in English, then says “amigo”','nombra a un amigo en inglés, luego «amigo»'],
+  camila:['helps a friend who is stuck name a helper','ayuda a un amigo a nombrar a un ayudante'],
+  amaya:['names helpers in both languages','nombra ayudantes en los dos idiomas']},
+ exercise:{diego:['seated version of every move; cards within reach','versión sentada de cada movimiento; tarjetas a su alcance'],
+  sofia:['seated option said aloud; adult models first','opción sentada en voz alta; adulto modela primero'],
+  lucas:['same order every time; count aloud; quiet spot if needed','mismo orden siempre; cuenta en voz alta; lugar tranquilo si lo necesita'],
+  sebastian:['partners with Camila for March in Place','pareja de Camila en March in Place'],
+  isabella:['adult models beside her; small moves are fine','adulto modela a su lado; movimientos pequeños están bien'],
+  noah:['leads March in Place','guía March in Place'],
+  valentina:['leads the Forward Lunge','guía la Zancada al frente'],
+  camila:['leads the Forward Lunge with Valentina','guía la Zancada al frente con Valentina'],
+  amaya:['models the standing version','modela la versión de pie'],
+  mateo:['chooses each move by gesture or on AAC','elige cada movimiento con gesto o en CAA'],
+  emma:['move picture cards; face the leader','tarjetas de movimientos; de frente al líder'],
+  liam:['counts the reps in English, then Spanish','cuenta las repeticiones en inglés y español']},
+ turn:{noah:['First/Next card in his hand; 5 s before his turn','tarjeta Primero/Luego en la mano; 5 s antes de su turno'],
+  lucas:['warn him one turn ahead; same partner each round','avísale un turno antes; misma pareja cada ronda'],
+  sebastian:['First/Next with adult hand-off','Primero/Luego con traspaso del adulto'],
+  sofia:['First/Next card + 10 s to start her turn','tarjeta Primero/Luego + 10 s para empezar su turno'],
+  amaya:['goes second and cheers on her partner','va segunda y anima a su pareja'],
+  liam:['counts to 5 while he waits, then his turn','cuenta hasta 5 mientras espera, luego su turno'],
+  isabella:['takes turns with her partner, not the whole group','turnos con su pareja, no con todo el grupo'],
+  mateo:['taps “my turn” on his AAC board','toca «mi turno» en su CAA'],
+  valentina:['turn cues in Spanish: «mi turno, tu turno»','pistas de turno en español: «mi turno, tu turno»'],
+  camila:['waits with a First/Next card','espera con la tarjeta Primero/Luego'],
+  diego:['points to the First/Next card','señala la tarjeta Primero/Luego'],
+  emma:['signs MY TURN / YOUR TURN','seña de MI TURNO / TU TURNO']},
+ closing:{sofia:['pledge with signs; 10 s wait','promesa con señas; 10 s de espera'],
+  mateo:['pledge on his AAC board','promesa en su tablero CAA'],
+  emma:['signs the pledge with the group; face her','promesa con señas junto al grupo; de frente'],
+  lucas:['Five-Finger card for the breathing','tarjeta de cinco dedos para respirar'],
+  noah:['breathing seated after a short march','respiración sentado después de marchar'],
+  diego:['feelings faces on his tray','caritas en su bandeja'],
+  isabella:['says the pledge with a partner','dice la promesa con su pareja'],
+  valentina:['pledge in Spanish, then English','promesa en español, luego inglés'],
+  liam:['pledge in English; echoes “Somos parte”','promesa en inglés; repite «Somos parte»'],
+  sebastian:['names his feeling in Spanish, then English','nombra su emoción en español y luego en inglés']}
+};
+/* one-line "how to help" for each child, from their profile (used in Watch tomorrow) */
+const KHOW={valentina:['Spanish first, then English','español primero, luego inglés'],liam:['English first, Spanish echo','inglés primero, eco en español'],
+ sofia:['model first · 10 s wait','modelo primero · 10 s de espera'],mateo:['on his AAC board','en su tablero CAA'],lucas:['two choices · warn before changes','dos opciones · avisar antes de cambios'],
+ camila:['quick check at her table','revisión rápida en su mesa'],sebastian:['tactile cue + mirror','pista táctil + espejo'],amaya:['as the peer model','como modelo para sus pares'],
+ diego:['cards within reach · he points','tarjetas a su alcance · él señala'],isabella:['to a partner first','a una pareja primero'],noah:['after March in Place','después de March in Place'],
+ emma:['facing her · with a sign','de frente · con una seña']};
+function knote(bid,k,fb){const n=(KNOTE[bid]||{})[k.id];return n?(UI.lang==='es'?n[1]:n[0]):fb}
+function boxNotes(bid){/* per-box student notes: today's data + screening pick WHO, each child's profile says HOW */const es=UI.lang==='es';const N=[];const R=(k,i)=>getR(k.id,i);const lowB5=(k,d)=>domLevel(k.id,d).lv===1;const need=(k,i)=>R(k,i)&&R(k,i)!=='ok';const sup=(k,i)=>['sup','no'].includes(R(k,i));const add=k=>{if(N.length<4&&!N.some(n=>n.k===k.id)){const b=bid==='exercise'&&sup(k,'turn')&&!sup(k,'wings')&&k.id!=='diego'?'turn':bid;N.push({k,txt:knote(b,k,'')})}};
+ const pick={
+  intro:k=>sup(k,'reg_body')||k.modes.includes('aac')||k.id==='lucas'||k.id==='isabella',
+  today:k=>k.id==='lucas'||k.modes.includes('point')||k.modes.includes('aac'),
+  ready:k=>sup(k,'reg_body')||k.id==='noah'||k.id==='sofia',
+  sounds:k=>need(k,'snd')||lowB5(k,'pa')||WORDS.some(w=>R(k,'w_'+w.id)==='no'),
+  book:k=>need(k,'retell')||lowB5(k,'cp'),
+  sentences:k=>need(k,'word')||lowB5(k,'ol')||k.modes.includes('aac'),
+  fly:k=>need(k,'bk')||lowB5(k,'bk')||k.id==='lucas',
+  exercise:k=>sup(k,'wings')||sup(k,'turn')||k.id==='diego',
+  closing:k=>k.modes.includes('aac')||k.modes.includes('sign')||sup(k,'reg_body')}[bid];
+ if(pick){const hit=KIDS.filter(pick);
+  // children with the most to gain first (Big 5 lowest), so the four shown are the ones who need it most
+  hit.sort((a,b)=>b5avg(a.id)-b5avg(b.id)).forEach(add)}
+ return N.filter(n=>n.txt)}
 /* read-only view of one box as the live board shows it (content mirrors board.html) */
 function boardMini(b){const es=UI.lang==='es';const E=(en,s_)=>es?s_:en;
  const faces=(lab)=>`${lab?`<div class="bmlab">${lab}</div>`:''}<div class="bmfaces">${FEELS.map((f,i)=>`<span class="bmface"><img src="${FEELIMG[i]}" alt="">${E(f.en.charAt(0).toUpperCase()+f.en.slice(1),f.es.charAt(0).toUpperCase()+f.es.slice(1))}</span>`).join('')}</div>`;
@@ -1415,7 +1539,7 @@ function genPlanBoxes(){const es=UI.lang==='es';const P={boxes:{},groups:{beg:[]
  /* 9 closing */ add('closing',es?'Respiración · caritas · promesa':'Breathing · faces · pledge');const aac=KIDS.filter(k=>k.modes.includes('aac')||k.modes.includes('sign'));if(aac.length)add('closing',es?`Promesa con símbolos y señas · ${nm(aac)}`:`Pledge with symbols and signs · ${nm(aac)}`,'new',es?'Modo de respuesta del perfil':'Response mode from the profile');
  KIDS.filter(k=>k.id==='valentina'||k.id==='liam').forEach(k=>P.kid[k.id].push(k.home==='es'?(es?'Español primero, luego inglés':'Spanish first, then English'):(es?'Inglés primero, eco en español':'English first, Spanish echo')));
  if(lo)beg.forEach(k=>P.kid[k.id].push(`Big 5 · ${L(lo.d.n)} · ${es?'grupo pequeño 5 min':'5-min small group'}`));
- P.watch=[...new Set([...regK,...sk,...retK,...wd,...wn].map(k=>k.id))].slice(0,5).map(id=>({id,what:P.kid[id][0]||''}));
+ const WB=[['ready',regK,es?'Listo para aprender':'Getting ready'],['sounds',sk,es?'Sonidos':'Sounds'],['book',retK,es?'Recuento':'Retell'],['sentences',wd,es?'Frases':'Sentences'],['exercise',wn,es?'Movimiento':'Movement']];P.watch=[...new Set([...regK,...sk,...retK,...wd,...wn].map(k=>k.id))].slice(0,5).map(id=>{const w=WB.find(x=>x[1].some(k=>k.id===id));const rv=(P.kid[id]||[]).find(s=>/^(Review|Repasar) /.test(s));const h=KHOW[id];return {id,what:w[0]==='sounds'&&rv&&h?rv+' · '+(es?h[1]:h[0]):w[2]+' · '+knote(w[0],KID[id],'')}});
  P.family=low.length?{es:`En casa: busquen «${low[0].w.en} / ${low[0].w.es}» en un cuento y hagan el gesto (${L(low[0].w.gesture)}).`,en:`At home: find “${low[0].w.en} / ${low[0].w.es}” in a story and do the gesture (${L(low[0].w.gesture)}).`}:{es:'En casa: «mi turno · tu turno» con un juego de mesa.',en:'At home: “my turn · your turn” with a board game.'};
  return P}
 function vTomorrow(){const es=UI.lang==='es';if(!anyRecorded())return pageHero(t('tom_h'),t('tom_s'),'')+`<div class="card pad" style="text-align:center"><p class="muted" style="margin-bottom:12px">${t('none_yet')}</p><button class="btn red" data-act="start">▶ ${t('start')}</button></div>`;if(!S.plan){S.plan=genPlanBoxes();S.edits={}}const P=S.plan;const nchg=BOXES.reduce((a,b)=>a+P.boxes[b.id].filter(l=>l.kind!=='same').length,0);const G={beg:'var(--gold)',pro:'var(--blue)',adv:'var(--teal)'};
